@@ -39,8 +39,8 @@ INSERT INTO Customers(Name, Email, Phone)
 
 CREATE TABLE Sales (
     SaleID SERIAL PRIMARY KEY,
-    BookID INT REFERENCES Books(BookID),
-    CustomerID INT REFERENCES Customers(CustomerID),
+    BookID INT REFERENCES Books(BookID) ON DELETE SET NULL,
+    CustomerID INT REFERENCES Customers(CustomerID) ON DELETE SET NULL,
     DateOfSale DATE,
     QuantitySold INT CHECK(QuantitySold > 0),
     TotalPrice NUMERIC(5, 2) CHECK (TotalPrice >= 0)
@@ -72,7 +72,6 @@ GROUP BY
     Books.Genre;
 
 
-
 CREATE OR REPLACE FUNCTION update_quantity_in_stock()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -82,7 +81,6 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 
 CREATE TRIGGER quantity_update_trigger
 AFTER INSERT ON Sales
